@@ -1,0 +1,33 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: user-center
+
+  jpa:
+    open-in-view: false
+  datasource:
+    url: jdbc:mysql://47.98.60.41:3306/user_center?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name:  com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.98.60.41:8848
+    stream:
+      rocketmq:
+        binder:
+          name-server: 192.168.137.129:9876
+      bindings:
+        input:
+          destination: stream-test-topic
+          #一定要设置
+          group: binder-group
+
+rocketmq:
+  name-server: 192.168.137.129:9876
+
+

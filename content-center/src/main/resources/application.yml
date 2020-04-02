@@ -1,0 +1,73 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: content-center
+  jpa:
+    open-in-view: false
+  datasource:
+    url: jdbc:mysql://47.98.60.41:3306/content_center?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name:  com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  #服务发现地址
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 47.98.60.41:8848
+    #sentinel
+    sentinel:
+      filter:
+        # 关闭对spring mvc端点的保护
+        enabled: true
+        #指定控制台地址
+      transport:
+        dashboard: localhost:8080
+      #关闭懒加载
+      eager: true
+    #spring cloud stream
+    stream:
+      rocketmq:
+        binder:
+          name-server: 192.168.137.129:9876
+      bindings:
+        output:
+          #用来指定topic
+          destination: stream-test-topic
+
+#feign
+feign:
+  sentinel:
+    enabled: true
+  client:
+    config:
+      #指定打印服务名
+      default:
+        loggerLevel: full
+  httpclient:
+    #httpclient
+    enabled: true
+    #feign 最大连接
+    max-connections: 200
+    # feign
+    max-connections-per-route: 50
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: '*'
+logging:
+  level:
+    org.linn.center.feignclient: debug
+
+#阿里高可用
+#ahas.namespace: default
+#project.name: AppName
+#ahas.license: 31a232a9b7f54d4c9421d66e421af483
+
+rocketmq:
+  name-server: 192.168.137.129:9876
+  producer:
+    group: test-group
+
